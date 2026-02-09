@@ -14,8 +14,29 @@ from fastapi.templating import Jinja2Templates
 from pathlib import Path
 import shutil
 import tempfile
+from contextlib import asynccontextmanager
 
-app = FastAPI(title="DeepFake Detection API")
+# Initialization of global variables for models
+EFFNET = None
+VIT_MODEL = None
+IMG_SIZE = None
+NUM_FRAMES = None
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global EFFNET, VIT_MODEL, IMG_SIZE, NUM_FRAMES
+    print("Initializing models (lifespan)...")
+    try:
+        EFFNET, VIT_MODEL, IMG_SIZE, NUM_FRAMES = load_models()
+        print("Models initialized successfully.")
+    except Exception as e:
+        print(f"Error loading models during startup: {e}")
+        # In production, you might want to handle this more gracefully
+        raise e
+    yield
+    print("Shutting down application...")
+
+app = FastAPI(title="DeepFake Detection API", lifespan=lifespan)
 
 # Setup paths
 BASE_DIR = Path(__file__).resolve().parent
@@ -89,15 +110,7 @@ def load_models():
     
     return effnet, vit_model, img_size, num_frames
 
-# Initialize models
-print("Initializing models...")
-try:
-    EFFNET, VIT_MODEL, IMG_SIZE, NUM_FRAMES = load_models()
-except Exception as e:
-    print(f"Error loading models: {e}")
-    # Fallback or exit if models are critical
-    # For coding/local demo, we might want to see the error
-    raise e
+# The global variables are initialized in the lifespan context manager.
 
 # Preprocessing transforms
 transform = T.Compose([
@@ -153,7 +166,7 @@ def extract_frames(video_path, num_frames=16):
 
 # --- Endpoints ---
 
-@app.get("/", response_class=HTMLResponse)
+@app.api_route("/", methods=["GET", "HEAD"], response_class=HTMLResponse)
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
@@ -208,4 +221,6 @@ async def predict_video(file: UploadFile = File(...)):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    # Render provides the port via the PORT environment variable
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
