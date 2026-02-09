@@ -1,0 +1,10 @@
+{
+    "IMG_SIZE": 224,
+    "NUM_FRAMES": 16,
+    "FEATURE_DIM": 1280,
+    "ARCH": "tf_efficientnet_b0_ns + TemporalViT",
+    "CLASSES": [
+        "Fake",
+        "Real"
+    ]
+}

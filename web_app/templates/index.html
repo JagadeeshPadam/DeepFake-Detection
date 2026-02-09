@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepFake Detection | AI Guard</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-radial"></div>
+    <div class="container">
+        <header>
+            <h1 class="glow-text">DeepFake <span class="accent">Detection</span></h1>
+            <p class="subtitle">Secure your digital identity with Temporal ViT analysis</p>
+        </header>
+
+        <main>
+            <div class="glass-card upload-section">
+                <div class="drop-zone" id="drop-zone">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    </div>
+                    <h3>Upload Video</h3>
+                    <p>Drag and drop or click to select</p>
+                    <input type="file" id="file-input" accept=".mp4,.avi,.mov" hidden>
+                    <p class="file-info" id="file-info"></p>
+                </div>
+                
+                <div class="actions">
+                    <button id="predict-btn" class="primary-btn" disabled>
+                        <span class="btn-text">Detect Authenticity</span>
+                        <div class="loader" id="loader"></div>
+                    </button>
+                </div>
+            </div>
+
+            <div id="result-container" class="glass-card result-section hidden">
+                <div class="result-header">
+                    <h3>Analysis Result</h3>
+                </div>
+                <div class="result-content">
+                    <div class="prediction-badge" id="prediction-badge">
+                        <span id="prediction-text">---</span>
+                    </div>
+                    <div class="confidence-container">
+                        <label>Confidence Score</label>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="confidence-fill"></div>
+                        </div>
+                        <p id="confidence-text">0.00%</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p></p>
+        </footer>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

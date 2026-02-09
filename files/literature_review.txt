@@ -1,0 +1,76 @@
+"""
+Literature Review (References) - DeepFake Detection
+
+Overview
+DeepFake detection research emphasizes the arms race between increasingly realistic
+synthetic media and detection systems. Recent surveys highlight that deep learning
+dominates current approaches, but generalisation across unseen datasets and attack
+types remains a key limitation. The literature also stresses the importance of
+dataset diversity, temporal cues, and robust spatial feature extraction.
+
+Key Findings from the Reviewed Papers
+1) Surveys and Systematic Reviews
+- Ahmed et al. provide a comprehensive review of visual DeepFake detection, grouping
+  techniques by spatial, temporal, frequency, and spatio-temporal features and
+  discussing generation tools and datasets. They emphasize that detection accuracy
+  hinges on data quality and feature robustness across domains. [1]
+- Ramanaharan et al. focus on model generalisation, showing that many detectors
+  overfit to popular datasets (e.g., FaceForensics++, DFDC, Celeb-DF). Their study
+  reports that generalisation is a persistent challenge and calls for broader,
+  more diverse benchmarks and evaluation settings. [2]
+- Kaur et al. review deepfake video detection challenges and opportunities, noting
+  that deep learning methods dominate but often lack computational efficiency and
+  generalisation. They highlight data imbalance, labelling limitations, and the
+  need for real-time robust systems. [5]
+
+2) Comparative Technique Reviews
+- Khan et al. compare core deepfake detection architectures (e.g., CNN-LSTM,
+  XceptionNet, MesoNet, capsule networks, and artifact-based methods). Their
+  analysis shows strong performance from CNN-based detectors (XceptionNet, MesoNet)
+  on FaceForensics++ while artifact-based methods offer competitive AUCs in
+  certain datasets. They also summarize common datasets and emphasize the role
+  of temporal modeling for video-level detection. [4]
+
+3) Image-Focused DeepFake Detection
+- Patel and Jain present a deepfake image detection study using machine learning
+  and deep learning, describing preprocessing, dataset splitting, and CNN-based
+  classification with transfer learning. Their findings reinforce that CNNs are
+  effective for spatial artifact extraction in image-based detection tasks. [3]
+
+Connection to This Project
+The implementation in `code/deepfake_detection_with_high_accuracy.py` follows
+the literature trends:
+- Spatial feature extraction using a pretrained CNN backbone (EfficientNet) aligns
+  with the strong performance of CNN-based detectors highlighted in [1,4,5].
+- Temporal modeling via a transformer-based sequence model (Temporal ViT)
+  addresses the need for temporal inconsistency detection, aligning with
+  survey findings that temporal features improve video deepfake detection. [1,4]
+- The emphasis on data preparation (face extraction, frame sampling, normalization)
+  aligns with best practices described in [3] and the dataset quality concerns
+  raised in [2,5].
+
+Overall, the reviewed papers support the design choices in this project: combining
+robust spatial feature extraction with temporal modeling, while recognizing that
+generalisation across datasets remains a key research challenge.
+
+References
+[1] N. U. R. Ahmed, A. Badshah, H. Adeel, A. Tajammul, A. Daud, and T. Alsahfi,
+    "Visual Deepfake Detection: Review of Techniques, Tools, Limitations, and
+    Future Prospects," IEEE Access, 2025, doi: 10.1109/ACCESS.2024.3523288.
+
+[2] R. Ramanaharan, D. B. Guruge, and J. I. Agbinya, "DeepFake video detection:
+    Insights into model generalisation — A Systematic review," Data and Information
+    Management, vol. 9, 2025, article 100099, doi: 10.1016/j.dim.2025.100099.
+
+[3] Y. Patel and M. Jain, "Deepfake Image Detection Using Machine Learning and
+    Deep Learning," Educational Administration: Theory and Practice, vol. 30,
+    no. 5, pp. 14987-14993, 2024, doi: 10.53555/kuey.v30i5.7980.
+
+[4] R. Khan, M. Sohail, I. Usman, M. Sandhu, M. Raza, M. A. Yaqub, and A. Liotta,
+    "Comparative study of deep learning techniques for DeepFake video detection,"
+    ICT Express, vol. 10, pp. 1226-1239, 2024, doi: 10.1016/j.icte.2024.09.018.
+
+[5] A. Kaur, A. Noori Hoshyar, V. Saikrishna, S. Firmin, and F. Xia,
+    "Deepfake video detection: challenges and opportunities," Artificial Intelligence
+    Review, vol. 57, 2024, article 159, doi: 10.1007/s10462-024-10810-6.
+"""

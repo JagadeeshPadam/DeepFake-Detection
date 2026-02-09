@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+python-multipart
+jinja2
+torch
+torchvision
+timm
+opencv-python-headless
+numpy
+Pillow
+scikit-learn
+matplotlib
+seaborn
+tqdm

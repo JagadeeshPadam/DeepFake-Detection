@@ -1,0 +1,67 @@
+EXISTING SYSTEMS (FROM PREVIOUS PAPERS ONLY)
+
+Overview
+The reviewed papers describe deepfake detection systems that rely on deep learning
+for spatial artifact detection, temporal inconsistency modeling, and sometimes
+frequency-domain cues. Surveys emphasize that while these systems can achieve strong
+performance on benchmark datasets, generalisation to unseen manipulations remains a
+major limitation, and dataset diversity is critical for robust deployment. [1,2,4,5]
+
+1) Spatial CNN-Based Detectors
+- XceptionNet: A CNN architecture widely used for deepfake detection on datasets like
+  FaceForensics++. It achieves high accuracy in benchmark evaluations and is frequently
+  reported as a top-performing baseline. [4]
+- MesoNet (Meso-4 and MesoInception-4): Lightweight CNN architectures designed to detect
+  mesoscopic artifacts in manipulated faces, offering competitive accuracy with fewer
+  parameters. [4]
+- Transfer learning CNNs for image deepfakes: CNN-based classification of real vs fake
+  images with preprocessing, dataset splitting, and hyperparameter tuning are reported
+  in image-focused studies. [3]
+
+2) Temporal and Spatio-Temporal Systems
+- CNN + LSTM (Conv-LSTM): Uses CNNs for frame-level feature extraction and LSTM for
+  sequence modeling to detect temporal inconsistencies in video clips. [4]
+- Recurrent convolutional strategies: Recurrent convolutional networks use face-aligned
+  frame sequences to model temporal inconsistencies across frames. [4]
+- Spatial-temporal video transformers: Transformer-based models capture spatial artifacts
+  and temporal inconsistencies with self-attention mechanisms for video-level detection. [4]
+
+3) Artifact-Driven and Hybrid Systems
+- Face warping artifacts: Detects resolution and affine warping artifacts introduced
+  during face synthesis, using CNNs trained on simulated warping inconsistencies. [4]
+- Two-stream neural network: Combines a face classification stream (high-level artifacts)
+  and a patch-triplet stream (low-level noise residuals) for tampered face detection. [4]
+- Visual artifacts (eyes, teeth, contours): Classical visual cues are used to detect
+  deepfake artifacts with lightweight classifiers. [4]
+
+4) Capsule Networks
+- Capsule-Forensics: Uses capsule networks to detect fake images and videos, with
+  variants for different input sizes and dropout/noise regularisation. [4]
+
+5) Systematic Review Insights on Detection Families
+- Visual deepfake detection techniques are grouped into spatial, temporal, frequency,
+  and spatio-temporal categories. These categories guide system design and evaluation
+  across datasets and manipulation types. [1]
+- Surveys emphasize dataset quality and diversity as critical to detection performance,
+  and note that many systems overfit to popular datasets, limiting generalisation. [2,5]
+
+References
+[1] N. U. R. Ahmed, A. Badshah, H. Adeel, A. Tajammul, A. Daud, and T. Alsahfi,
+    "Visual Deepfake Detection: Review of Techniques, Tools, Limitations, and
+    Future Prospects," IEEE Access, 2025, doi: 10.1109/ACCESS.2024.3523288.
+
+[2] R. Ramanaharan, D. B. Guruge, and J. I. Agbinya, "DeepFake video detection:
+    Insights into model generalisation — A Systematic review," Data and Information
+    Management, vol. 9, 2025, article 100099, doi: 10.1016/j.dim.2025.100099.
+
+[3] Y. Patel and M. Jain, "Deepfake Image Detection Using Machine Learning and
+    Deep Learning," Educational Administration: Theory and Practice, vol. 30,
+    no. 5, pp. 14987-14993, 2024, doi: 10.53555/kuey.v30i5.7980.
+
+[4] R. Khan, M. Sohail, I. Usman, M. Sandhu, M. Raza, M. A. Yaqub, and A. Liotta,
+    "Comparative study of deep learning techniques for DeepFake video detection,"
+    ICT Express, vol. 10, pp. 1226-1239, 2024, doi: 10.1016/j.icte.2024.09.018.
+
+[5] A. Kaur, A. Noori Hoshyar, V. Saikrishna, S. Firmin, and F. Xia,
+    "Deepfake video detection: challenges and opportunities," Artificial Intelligence
+    Review, vol. 57, 2024, article 159, doi: 10.1007/s10462-024-10810-6.
