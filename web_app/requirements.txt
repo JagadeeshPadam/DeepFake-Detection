@@ -8,7 +8,4 @@ timm
 opencv-python-headless
 numpy
 Pillow
-scikit-learn
-matplotlib
-seaborn
 tqdm

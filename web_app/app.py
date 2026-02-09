@@ -14,6 +14,7 @@ from fastapi.templating import Jinja2Templates
 from pathlib import Path
 import shutil
 import tempfile
+import asyncio
 from contextlib import asynccontextmanager
 
 # Initialization of global variables for models with safe defaults
@@ -23,10 +24,9 @@ IMG_SIZE = 224
 NUM_FRAMES = 16
 transform = None
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
+async def initialize_models_background():
     global EFFNET, VIT_MODEL, IMG_SIZE, NUM_FRAMES, transform
-    print("Initializing models (lifespan)...")
+    print("Initializing models in background...")
     try:
         EFFNET, VIT_MODEL, IMG_SIZE, NUM_FRAMES = load_models()
         # Initialize transformation after IMG_SIZE is loaded
@@ -35,10 +35,14 @@ async def lifespan(app: FastAPI):
             T.ToTensor(),
             T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ])
-        print("Models and transforms initialized successfully.")
+        print("Models and transforms initialized successfully in background.")
     except Exception as e:
-        print(f"Error loading models during startup: {e}")
-        raise e
+        print(f"CRITICAL: Failed to load models in background: {e}")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Start model loading in the background so the server can start immediately
+    asyncio.create_task(initialize_models_background())
     yield
     print("Shutting down application...")
 
@@ -171,6 +175,11 @@ def extract_frames(video_path, num_frames=16):
 @app.api_route("/", methods=["GET", "HEAD"], response_class=HTMLResponse)
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/health")
+async def health_check():
+    status = "loading" if EFFNET is None else "ready"
+    return {"status": status, "models_loaded": EFFNET is not None}
 
 @app.post("/predict")
 async def predict_video(file: UploadFile = File(...)):
