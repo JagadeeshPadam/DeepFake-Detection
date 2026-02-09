@@ -16,22 +16,28 @@ import shutil
 import tempfile
 from contextlib import asynccontextmanager
 
-# Initialization of global variables for models
+# Initialization of global variables for models with safe defaults
 EFFNET = None
 VIT_MODEL = None
-IMG_SIZE = None
-NUM_FRAMES = None
+IMG_SIZE = 224
+NUM_FRAMES = 16
+transform = None
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global EFFNET, VIT_MODEL, IMG_SIZE, NUM_FRAMES
+    global EFFNET, VIT_MODEL, IMG_SIZE, NUM_FRAMES, transform
     print("Initializing models (lifespan)...")
     try:
         EFFNET, VIT_MODEL, IMG_SIZE, NUM_FRAMES = load_models()
-        print("Models initialized successfully.")
+        # Initialize transformation after IMG_SIZE is loaded
+        transform = T.Compose([
+            T.Resize((IMG_SIZE, IMG_SIZE)),
+            T.ToTensor(),
+            T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        ])
+        print("Models and transforms initialized successfully.")
     except Exception as e:
         print(f"Error loading models during startup: {e}")
-        # In production, you might want to handle this more gracefully
         raise e
     yield
     print("Shutting down application...")
@@ -112,12 +118,8 @@ def load_models():
 
 # The global variables are initialized in the lifespan context manager.
 
-# Preprocessing transforms
-transform = T.Compose([
-    T.Resize((IMG_SIZE, IMG_SIZE)),
-    T.ToTensor(),
-    T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-])
+# Preprocessing transforms (initialized in lifespan)
+# transform = T.Compose([...])
 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 
@@ -172,6 +174,9 @@ async def index(request: Request):
 
 @app.post("/predict")
 async def predict_video(file: UploadFile = File(...)):
+    if EFFNET is None or VIT_MODEL is None or transform is None:
+        raise HTTPException(status_code=503, detail="Models are still initializing. Please try again in a moment.")
+
     if not file.filename.endswith(('.mp4', '.avi', '.mov')):
         raise HTTPException(status_code=400, detail="Only video files (mp4, avi, mov) are supported.")
     
