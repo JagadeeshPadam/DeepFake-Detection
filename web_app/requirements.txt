@@ -7,7 +7,7 @@ torch==2.2.2+cpu
 torchvision==0.17.2+cpu
 timm
 opencv-python-headless
-numpy
+numpy<2.0.0
 Pillow
 tqdm
 
